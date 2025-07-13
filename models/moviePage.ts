@@ -1,4 +1,4 @@
-import { Movie } from "./movie";
+import { Movie } from "./movie-old";
 
 export interface MoviePage{
     movieList:Movie[];
