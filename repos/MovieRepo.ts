@@ -9,8 +9,8 @@ const options = {
 };
 
 export class MovieRepo {
-    async getMovieList(page: number): Promise<MoviePage> {
-        const response = await fetch(`https://api.themoviedb.org/3/movie/top_rated?language=en-US&page=${page}`, options);
+    async getMovieList(page: number,language = "en-US"): Promise<MoviePage> {
+        const response = await fetch(`https://api.themoviedb.org/3/trending/all/day?language=${language}&page=${page}`, options);
         const data = await response.json();
         return {
             movieList: data.results,
