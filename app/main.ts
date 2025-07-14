@@ -1,6 +1,7 @@
 import { MovieRepo } from "../repos/MovieRepo.js";
 import { MovieService } from "../services/MovieService.js";
 import { Movie } from "../models/Movie.js";
+import { UserService } from "../services/userService.js";
 
 class MovieApp {
     private movieRepo: MovieRepo;
@@ -185,24 +186,35 @@ class MovieApp {
 
         return `
             <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
-                <div class="card movie-card h-100 shadow-sm">
-                    <img src="${posterUrl}" class="card-img-top movie-poster" alt="${movie.title}" 
-                         onerror="this.src='https://placehold.co/300x450?text=No+Poster'">
-                    <div class="card-body d-flex flex-column">
-                        <h5 class="card-title">${movie.title}</h5>
-                        <div class="mb-2">
-                            <span class="badge bg-primary">⭐ ${rating}</span>
-                            <span class="badge bg-secondary">${releaseDate}</span>
+                <div class="card movie-card h-100 shadow-sm border-0">
+                    <div class="position-relative">
+                        <img src="${posterUrl}" class="card-img-top movie-poster" alt="${movie.title}" 
+                             onerror="this.src='https://placehold.co/300x450?text=No+Poster'"
+                             style="height: 400px; object-fit: cover;">
+                        <div class="position-absolute top-0 end-0 m-2">
+                            <span class="badge bg-warning text-dark fs-6">
+                                <i class="bi bi-star-fill me-1"></i>${rating}
+                            </span>
                         </div>
-                        <p class="card-text flex-grow-1">${overview}</p>
-                        <div class="mt-auto">
-                            <button class="btn btn-outline-primary btn-sm" onclick="showMovieDetails(${movie.id})">
-                                View Details
+                    </div>
+                    <div class="card-body d-flex flex-column p-3">
+                        <h5 class="card-title fw-bold text-truncate mb-2" title="${movie.title}">${movie.title}</h5>
+                        <div class="mb-3">
+                            <span class="badge bg-info text-dark">
+                                <i class="bi bi-calendar3 me-1"></i>${releaseDate}
+                            </span>
+                        </div>
+                        <p class="card-text flex-grow-1 text-muted small lh-sm">${overview}</p>
+                        <div class="mt-auto d-grid">
+                            <button class="btn btn-primary btn-sm" onclick="showMovieDetails(${movie.id})">
+                                <i class="bi bi-eye me-2"></i>View Details
                             </button>
                         </div>
                     </div>
-                    <div class="card-footer text-muted">
-                        <small>Popularity: ${movie.popularity.toFixed(0)}</small>
+                    <div class="card-footer border-0 text-center">
+                        <small class="text-muted">
+                            <i class="bi bi-graph-up me-1"></i>Popularity: ${movie.popularity.toFixed(0)}
+                        </small>
                     </div>
                 </div>
             </div>
@@ -255,6 +267,164 @@ class MovieApp {
         const currentFilter = document.getElementById('currentFilter');
         if (currentFilter) currentFilter.textContent = filter;
     }
+
+    public showMovieDetails(movieId: number): void {
+        const movie = this.currentMovies.find(m => m.id === movieId);
+        if (!movie) {
+            this.showError('Movie not found.');
+            return;
+        }
+
+        this.displayMovieDetails(movie);
+    }
+
+    private displayMovieDetails(movie: Movie): void {
+        const moviesGrid = document.getElementById('moviesGrid') as HTMLDivElement;
+        if (!moviesGrid) return;
+
+        const backdropUrl = movie.backdrop_path 
+            ? `https://image.tmdb.org/t/p/w1280${movie.backdrop_path}`
+            : 'https://placehold.co/1280x720?text=No+Backdrop';
+        
+        const posterUrl = movie.poster_path 
+            ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+            : 'https://placehold.co/300x450?text=No+Poster';
+
+        const releaseDate = new Date(movie.release_date).toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+
+        const rating = movie.vote_average.toFixed(1);
+        const voteCount = movie.vote_count.toLocaleString();
+
+        moviesGrid.innerHTML = `
+            <div class="col-12">
+                <!-- Hero Section with Backdrop -->
+                <div class="card border-0 shadow-lg mb-4">
+                    <div class="position-relative" style="height: 300px; background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.7)), url('${backdropUrl}'); background-size: cover; background-position: center;">
+                        <div class="position-absolute bottom-0 start-0 p-4">
+                            <button class="btn btn-outline-light btn-lg" onclick="returnToMovieGrid()">
+                                <i class="bi bi-arrow-left me-2"></i>
+                                Back to Movies
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Movie Details Card -->
+                <div class="card border-0 shadow">
+                    <div class="card-body p-4 p-md-5">
+                        <div class="row g-4">
+                            <!-- Movie Poster -->
+                            <div class="col-lg-4 col-md-5">
+                                <div class="position-sticky" style="top: 20px;">
+                                    <img src="${posterUrl}" class="img-fluid rounded shadow-lg w-100" alt="${movie.title}"
+                                         onerror="this.src='https://placehold.co/300x450?text=No+Poster'"
+                                         style="max-height: 600px; object-fit: cover;">
+                                </div>
+                            </div>
+                            
+                            <!-- Movie Information -->
+                            <div class="col-lg-8 col-md-7">
+                                <!-- Title Section -->
+                                <div class="mb-4">
+                                    <h1 class="display-5 fw-bold text-dark mb-2">${movie.title}</h1>
+                                    ${movie.original_title !== movie.title ? 
+                                        `<h2 class="h5 text-muted mb-3 fst-italic">${movie.original_title}</h2>` : ''}
+                                </div>
+
+                                <!-- Rating and Basic Info -->
+                                <div class="row g-3 mb-4">
+                                    <div class="col-sm-6">
+                                        <div class="d-flex align-items-center">
+                                            <span class="badge bg-warning text-dark fs-6 me-2">
+                                                <i class="bi bi-star-fill me-1"></i>${rating}
+                                            </span>
+                                            <small class="text-muted">(${voteCount} votes)</small>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <span class="badge bg-info text-dark fs-6">
+                                            <i class="bi bi-calendar3 me-1"></i>${releaseDate}
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <!-- Detailed Information Cards -->
+                                <div class="row g-3 mb-4">
+                                    <div class="col-md-6">
+                                        <div class="card border h-100">
+                                            <div class="card-body text-center">
+                                                <h6 class="card-title text-primary mb-1">
+                                                    <i class="bi bi-translate me-2"></i>Language
+                                                </h6>
+                                                <p class="card-text fw-semibold mb-0">${movie.original_language.toUpperCase()}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="card border h-100">
+                                            <div class="card-body text-center">
+                                                <h6 class="card-title text-success mb-1">
+                                                    <i class="bi bi-graph-up me-2"></i>Popularity
+                                                </h6>
+                                                <p class="card-text fw-semibold mb-0">${movie.popularity.toFixed(0)}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Overview Section -->
+                                <div class="mb-4">
+                                    <h3 class="h4 mb-3 text-primary border-bottom border-primary pb-2">
+                                        <i class="bi bi-file-text me-2"></i>Overview
+                                    </h3>
+                                    <p class="lead text-muted lh-lg">${movie.overview || 'No overview available for this movie.'}</p>
+                                </div>
+
+                                <!-- Action Buttons -->
+                                <div class="d-flex flex-wrap gap-3 pt-3 border-top">
+                                    <button class="btn btn-primary btn-lg px-4" onclick="returnToMovieGrid()">
+                                        <i class="bi bi-arrow-left me-2"></i>
+                                        Back to Movies
+                                    </button>
+                                    <button class="btn btn-outline-secondary btn-lg px-4" onclick="window.open('https://www.imdb.com/find?q=${encodeURIComponent(movie.title)}', '_blank')">
+                                        <i class="bi bi-box-arrow-up-right me-2"></i>
+                                        View on IMDb
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        // Hide other sections
+        this.hideMovieGridSections();
+    }
+
+    private hideMovieGridSections(): void {
+        const loadMoreSection = document.getElementById('loadMoreSection') as HTMLDivElement;
+        if (loadMoreSection) {
+            loadMoreSection.style.display = 'none';
+        }
+    }
+
+    private showMovieGridSections(): void {
+        const loadMoreSection = document.getElementById('loadMoreSection') as HTMLDivElement;
+        if (loadMoreSection && this.currentMovies.length >= 20) {
+            loadMoreSection.style.display = 'block';
+        }
+    }
+
+    public returnToMovieGrid(): void {
+        // Restore the movie grid view
+        this.displayMovies(this.currentMovies);
+        this.showMovieGridSections();
+    }
 }
 
 // Global functions for HTML onclick handlers
@@ -283,13 +453,28 @@ class MovieApp {
 };
 
 (window as any).showMovieDetails = (movieId: number) => {
-    // This would open a modal or navigate to a details page
-    alert(`Movie details for ID: ${movieId} - Feature coming soon!`);
+    if (window.movieApp) {
+        window.movieApp.showMovieDetails(movieId);
+    }
+};
+
+(window as any).returnToMovieGrid = () => {
+    if (window.movieApp) {
+        window.movieApp.returnToMovieGrid();
+    }
 };
 
 // Initialize the app when DOM is loaded
 window.addEventListener("DOMContentLoaded", () => {
-    window.movieApp = new MovieApp();
+    const userService = new UserService();
+    
+    // Verify that user is created before initializing the app
+    if (userService.isCreated()) {
+        window.movieApp = new MovieApp();
+    } else {
+        // Redirect to login if user is not created
+        window.location.href = 'index.html';
+    }
 });
 
 // Declare global types
@@ -301,5 +486,6 @@ declare global {
         loadByRating: (rating: number) => void;
         loadMoreMovies: () => void;
         showMovieDetails: (movieId: number) => void;
+        returnToMovieGrid: () => void;
     }
 }

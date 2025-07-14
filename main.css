@@ -3,22 +3,25 @@ body {
   height: 100%;
 }
 
-.form-signin {
-  max-width: 330px;
+.form {
+  max-width: 480px;
   padding: 1rem;
 }
 
-.form-signin .form-floating:focus-within {
+.form .form-floating:focus-within {
   z-index: 2;
 }
 
-.form-signin input[type="email"] {
+.form-signin input[type="email"] ,.form-signup input[type = "text"]{
   margin-bottom: -1px;
   border-bottom-right-radius: 0;
   border-bottom-left-radius: 0;
 }
-
-.form-signin input[type="password"] {
+.form-signup input[type="email"] {
+  margin-bottom: -1px;
+  border-radius: 0;
+}
+.form input[type="password"] {
   margin-bottom: 10px;
   border-top-left-radius: 0;
   border-top-right-radius: 0;
@@ -76,15 +79,13 @@ body {
   display: block !important;
 }
 .movie-card {
-    transition: transform 0.2s;
+    transition: all 0.3s ease;
     cursor: pointer;
+    border: none !important;
 }
 .movie-card:hover {
-    transform: scale(1.05);
-}
-.movie-poster {
-    height: 400px;
-    object-fit: cover;
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15) !important;
 }
 .loading-spinner {
     display: none;
@@ -93,4 +94,11 @@ body {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     padding: 2rem 0;
     margin-bottom: 2rem;
+}
+
+/* Additional Bootstrap-compatible styles for movie app */
+@media (max-width: 576px) {
+    .position-sticky {
+        position: static !important;
+    }
 }
