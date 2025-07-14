@@ -70,36 +70,31 @@
                     </svg> </button> </li>
         </ul>
     </div>
-    <main class="form-signup form w-100 m-auto">
-        <form id="register-form" method="get">
-            <div class="mb-4 w-100" style="width: 72px; height: 57px;">
+    <main class="form-signin form w-100 m-auto">
+        <form  id="login-form">
+             <div class="mb-4 w-100" style="width: 72px; height: 57px;">
                 <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" fill="currentColor"
                     class="bi bi-film" viewBox="0 0 16 16">
                     <path
                         d="M0 1a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1zm4 0v6h8V1zm8 8H4v6h8zM1 1v2h2V1zm2 3H1v2h2zM1 7v2h2V7zm2 3H1v2h2zm-2 3v2h2v-2zM15 1h-2v2h2zm-2 3v2h2V4zm2 3h-2v2h2zm-2 3v2h2v-2zm2 3h-2v2h2z" />
                 </svg>
             </div>
-            <h1 class="h3 mb-3 fw-normal text-center">Please sign up</h1>
-             <div class="form-floating">
-                <input type="text" class="form-control" id="floatingName" name="name" placeholder="Name">
-                <label for="floatingName">Name</label>
-            </div>
-            <div class="form-floating">
-                <input type="email" class="form-control" id="floatingEmail" name="email" placeholder="name@example.com">
-                <label for="floatingEmail">Email address</label>
-            </div>
-            <div class="form-floating">
-                <input type="password" class="form-control" id="floatingPassword" name="password" placeholder="Password">
-                <label for="floatingPassword">Password</label>
-            </div>
-            <button class="btn btn-primary w-100 py-2 my-3" type="button" onclick="onRegister()">Sign up</button>
+            <h1 class="h3 mb-3 fw-normal text-center">Please sign in</h1>
+            <div class="form-floating"> <input type="email" class="form-control" id="floatingInput" name="email"
+                    placeholder="name@example.com"> <label for="floatingInput">Email address</label> </div>
+            <div class="form-floating"> <input type="password" class="form-control" id="floatingPassword" name="password"
+                    placeholder="Password"> <label for="floatingPassword">Password</label> </div>
+            <div class="form-check text-start my-3"> <input class="form-check-input" type="checkbox" value="remember-me"
+                    id="checkDefault"> <label class="form-check-label" for="checkDefault">
+                    Remember me
+                </label> </div> <button class="btn btn-primary w-100 py-2" type="button" onclick="onLogin()">Sign in</button>
         </form>
     </main>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
         crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/systemjs@6.14.2/dist/system.min.js"></script>
     <script type="module" src="dist/app/login.js"></script>
+
 </body>
 
 </html>
