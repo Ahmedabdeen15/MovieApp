@@ -19,11 +19,18 @@ export class UserService {
             password: this.userRepo.getUserPassword() || ""
         }
         if(userTemp.email === user.email && userTemp.password === user.password){
+            this.userRepo.setLoginStatus(true);
             return true;
         }
         return false;
     }
     isCreated(): boolean {
         return this.userRepo.getUserName() !== null && this.userRepo.getUserEmail() !== null && this.userRepo.getUserPassword() !== null;
+    }
+    isLoggedIn(): boolean {
+        return this.userRepo.getLoginStatus();
+    }
+    logout(): void{
+        this.userRepo.setLoginStatus(false);
     }
 }

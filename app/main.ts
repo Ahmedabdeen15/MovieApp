@@ -463,7 +463,11 @@ class MovieApp {
         window.movieApp.returnToMovieGrid();
     }
 };
-
+(window as any).logout = () => {
+    const userService = new UserService();
+    userService.logout();
+    window.location.href = 'login.html';
+}
 // Initialize the app when DOM is loaded
 window.addEventListener("DOMContentLoaded", () => {
     const userService = new UserService();
@@ -474,6 +478,9 @@ window.addEventListener("DOMContentLoaded", () => {
     } else {
         // Redirect to login if user is not created
         window.location.href = 'index.html';
+    }
+    if(!userService.isLoggedIn()) {
+        window.location.href = 'login.html';
     }
 });
 
@@ -487,5 +494,6 @@ declare global {
         loadMoreMovies: () => void;
         showMovieDetails: (movieId: number) => void;
         returnToMovieGrid: () => void;
+
     }
 }
