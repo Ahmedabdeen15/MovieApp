@@ -304,7 +304,7 @@ class MovieApp {
                 <!-- Hero Section with Backdrop -->
                 <div class="card border-0 shadow-lg mb-4">
                     <div class="position-relative" style="height: 300px; background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.7)), url('${backdropUrl}'); background-size: cover; background-position: center;">
-                        <div class="position-absolute bottom-0 start-0 p-4">
+                        <div class="bottom-0 start-0 p-4">
                             <button class="btn btn-outline-light btn-lg" onclick="returnToMovieGrid()">
                                 <i class="bi bi-arrow-left me-2"></i>
                                 Back to Movies
@@ -330,14 +330,14 @@ class MovieApp {
                             <div class="col-lg-8 col-md-7">
                                 <!-- Title Section -->
                                 <div class="mb-4">
-                                    <h1 class="display-5 fw-bold text-dark mb-2">${movie.title}</h1>
+                                    <h1 class="display-5 fw-bold text-light mb-2">${movie.title}</h1>
                                     ${movie.original_title !== movie.title ? 
                                         `<h2 class="h5 text-muted mb-3 fst-italic">${movie.original_title}</h2>` : ''}
                                 </div>
 
                                 <!-- Rating and Basic Info -->
                                 <div class="row g-3 mb-4">
-                                    <div class="col-sm-6">
+                                    <div class="col-sm-6 col-6">
                                         <div class="d-flex align-items-center">
                                             <span class="badge bg-warning text-dark fs-6 me-2">
                                                 <i class="bi bi-star-fill me-1"></i>${rating}
@@ -345,7 +345,7 @@ class MovieApp {
                                             <small class="text-muted">(${voteCount} votes)</small>
                                         </div>
                                     </div>
-                                    <div class="col-sm-6">
+                                    <div class="col-sm-6 col-6">
                                         <span class="badge bg-info text-dark fs-6">
                                             <i class="bi bi-calendar3 me-1"></i>${releaseDate}
                                         </span>
@@ -386,11 +386,11 @@ class MovieApp {
 
                                 <!-- Action Buttons -->
                                 <div class="d-flex flex-wrap gap-3 pt-3 border-top">
-                                    <button class="btn btn-primary btn-lg px-4" onclick="returnToMovieGrid()">
+                                    <button class="btn btn-primary btn-lg px-4 w-100" onclick="returnToMovieGrid()">
                                         <i class="bi bi-arrow-left me-2"></i>
                                         Back to Movies
                                     </button>
-                                    <button class="btn btn-outline-secondary btn-lg px-4" onclick="window.open('https://www.imdb.com/find?q=${encodeURIComponent(movie.title)}', '_blank')">
+                                    <button class="btn btn-outline-secondary btn-lg px-4 w-100" onclick="window.open('https://www.imdb.com/find?q=${encodeURIComponent(movie.title)}', '_blank')">
                                         <i class="bi bi-box-arrow-up-right me-2"></i>
                                         View on IMDb
                                     </button>
